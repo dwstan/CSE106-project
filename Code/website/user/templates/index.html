@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- if user is not logged in -->
+    {% if not current_user.is_authenticated %}
+        <h1 class="display-4 font-weight-bold">
+            Nothing to see here, please login to see content
+        </h1>
+        <!-- if they be logged in -->
+    {% else %}
+        <h1 class="display-4 font-weight-bold">
+            Oh yeah instagram woo hoo
+        </h1>
+        <h2 class="h3 font-weight-semibold"></h2>
+        <p class="lead">
+            Shit poo fuck damnit
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

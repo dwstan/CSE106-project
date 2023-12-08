@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-2xl font-bold mb-4">Sign Up</h3>
+            <div class="bg-white p-4 rounded shadow">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-danger text-white p-4 mb-4">
+                        {{ messages[0] }}. Please <a href="{{ url_for('auth.login') }}" class="underline">login</a> to your account if you already have one.
+                    </div>
+                {% endif %}
+                {% endwith %}
+                <form method="POST" action="/signup">
+                    <div class="mb-4">
+                        <input class="form-control" type="email" name="email" placeholder="Email" autofocus="">
+                    </div>
+
+                    <div class="mb-4">
+                        <input class="form-control" type="text" name="name" placeholder="Username" autofocus="">
+                    </div>
+
+                    <div class="mb-4">
+                        <input class="form-control" type="password" name="password" placeholder="Password">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="profilePicture">Upload Profile Picture:</label>
+                        <input class="form-control" type="file" id="profilePicture" name="picture" accept="image/*">
+                        <small>If no profile picture is added, a default picture will be used.</small>
+                    </div>
+
+                    <button class="btn btn-primary btn-block">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+                        
