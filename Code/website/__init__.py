@@ -3,6 +3,9 @@ from website.user import user as user
 from website.auth import auth as auth
 from .model import db, User
 from flask_login import LoginManager
+from flask_uploads import UploadSet, configure_uploads, IMAGES
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
   # Import the 'main' blueprint from the routes module
 
 # Defines some of the Flask app's creation and settings
@@ -17,7 +20,9 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'  # Store the database locally in the instance folder
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
-
+    photos = UploadSet("photos", IMAGES)
+    app.config['UPLOADED_PHOTOS_DEST'] = 'Code/website/static/uploads'
+    configure_uploads(app, photos)
 
 
     db.init_app(app)

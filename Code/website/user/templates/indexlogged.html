@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+    timeline = "{{ timeline | tojson | safe }}"
+</script>
+
+<div class="container">
+    <script>
+        profilepicture = "{{ profilepicture }}"
+    </script>
+
+    <h1 class="display-4 font-weight-bold text-center">
+        Your Timeline
+    </h1>
+
+    {% for post in timeline %}
+    <div class="post container my-5" style=" width: 60vh;">
+    
+        <div style="background-color: lightgray; padding: 10px; display: flex; align-items: center; width: 60vh; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+            <div>
+                <a href="{{ url_for('user.profile_id', user_name = post.name) }}">
+                    <img src="{{ url_for('static', filename='uploads/' + post.profilepicture) }}" alt="Profile Picture" style="width: 10vh; height: 10vh; object-fit: cover; border-radius: 50%;">
+                </a>
+            </div>
+            <div style="margin-left: 10px;">
+                <a href="{{ url_for('user.profile_id', user_name = post.name) }}" class="text-decoration-none font-weight-bold text-black" style="font-size: 2.5vh;">
+                    {{ post.name }}
+                </a>
+            </div>
+        </div>
+
+
+        <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 60vh; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+        <div style="width: 60vh; height: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+            <div style="display: flex; align-items: center;">
+                <button style="margin-right: 10px; margin-left: 20px; margin-top: 20px;">Like Post</button>
+            </div>
+            <p style="text-align: left; font-size: 2vh; margin-left: 20px;">{{post.name}} - {{ post.description }}</p>
+
+        </div>
+    
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
+        

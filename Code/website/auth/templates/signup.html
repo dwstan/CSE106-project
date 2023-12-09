@@ -13,17 +13,18 @@
                     </div>
                 {% endif %}
                 {% endwith %}
-                <form method="POST" action="/signup">
+                <form method="POST" action="/signup" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="mb-4">
-                        <input class="form-control" type="email" name="email" placeholder="Email" autofocus="">
+                        <input class="form-control" type="email" name="email" placeholder="Email" autofocus="" required>
                     </div>
 
                     <div class="mb-4">
-                        <input class="form-control" type="text" name="name" placeholder="Username" autofocus="">
+                        <input class="form-control" type="text" name="name" id="nameInput" placeholder="Username" autofocus="" required>
+                        <small id="nameError" style="color: red;"></small>
                     </div>
 
                     <div class="mb-4">
-                        <input class="form-control" type="password" name="password" placeholder="Password">
+                        <input class="form-control" type="password" name="password" placeholder="Password" required>
                     </div>
 
                     <div class="mb-4">
@@ -34,6 +35,21 @@
 
                     <button class="btn btn-primary btn-block">Sign Up</button>
                 </form>
+
+                <script>
+                    function validateForm() {
+                        var nameInput = document.getElementById("nameInput");
+                        var nameError = document.getElementById("nameError");
+                        var nameRegex = /^[a-zA-Z0-9]+$/; // Only allow letters and numbers
+
+                        if (!nameRegex.test(nameInput.value)) {
+                            nameError.textContent = "Name can only contain letters and numbers";
+                            return false; // Prevent form submission
+                        }
+
+                        return true; // Allow form submission
+                    }
+                </script>
             </div>
         </div>
     </div>

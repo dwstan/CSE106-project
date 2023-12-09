@@ -15,14 +15,9 @@
         <div class="hero-head">
             <nav class="navbar navbar-expand-lg navbar-light bg-secondary"> <!-- Updated class here -->
                 <div class="container">
-                    <a class="navbar-brand" href="{{ url_for('user.index') }}">Notstagram</a> <!-- Added navbar-brand with "Notstagram" text -->
+                    <a class="navbar-brand" href="{{ url_for('user.index') }}">Outstagram</a> <!-- Added navbar-brand with "Notstagram" text -->
                     <div id="navbarMenuHeroA" class="navbar-collapse collapse">
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a href="{{ url_for('user.index') }}" class="nav-link">
-                                    Home
-                                </a>
-                            </li>
                             {% if current_user.is_authenticated %}
                             <li class="nav-item">
                                 <a href="{{ url_for('user.profile') }}" class="nav-link">

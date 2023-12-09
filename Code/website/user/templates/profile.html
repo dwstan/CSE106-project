@@ -1,9 +1,171 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h1 class="text-2xl font-bold">
-        Welcome, {{ name }}!
-    </h1>
+
+<script>
+    profile_data = "{{ profile_data | tojson | safe }}"
+    user_id = {{user_id}}
+    posts = "{{ posts | tojson | safe }}"
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#followForm").submit(function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            // Perform your AJAX request or other actions here
+            // Example using AJAX:
+            $.ajax({
+                type: "POST",
+                url: "/api/follow",
+                data: $("#followForm").serialize(), // Serialize the form data
+                success: function(response) {
+                    // Handle the response as needed
+                    // For example, you can update the UI to indicate that the follow action was successful
+                    location.reload()
+                },
+                error: function(err) {
+                    // Handle errors if the request fails
+                }
+            });
+        });
+        $("#unfollowForm").submit(function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            // Perform your AJAX request or other actions here
+            // Example using AJAX:
+            $.ajax({
+                type: "DELETE",
+                url: "/api/follow",
+                data: $("#unfollowForm").serialize(), // Serialize the form data
+                success: function(response) {
+                    // Handle the response as needed
+                    // For example, you can update the UI to indicate that the follow action was successful
+                    location.reload()
+                },
+                error: function(err) {
+                    // Handle errors if the request fails
+                }
+            });
+        });
+    });
+</script>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            
+
+                <style>
+                    .profile-picture-container {
+                    width: 256px;
+                    height: 256px;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    }
+
+                    .profile-picture-container img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 50%;
+                    }
+                </style>
+
+            <div class="profile-picture-container">
+                <style>
+                    .profile-picture-container {
+                        width: 256px;
+                        height: 256px;
+                        overflow: hidden;
+                        border-radius: 50%;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add shadow here */
+                    }
+
+                    .profile-picture-container img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 50%;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add shadow here */
+                    }
+                </style>
+
+                <div class="profile-picture-container">
+                    <img src="{{ url_for('static', filename='uploads/' + profile_data.profilepicture) }}" alt="Profile Picture">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 my-5">
+            <div style="display: flex; align-items: center;">
+                <h1 style="text-align: left; margin-left: 10vh;">{{profile_data.name}}</h1>
+
+                {% if user_id == profile_data.user_id %}
+                <a href="{{ url_for('user.index') }}">
+                    <button style="margin-left: 20px;">Edit Profile</button>
+                </a>
+                {% else %}
+                    {% if following.count == 1 %}
+                        <form id="unfollowForm" style="margin-left: 20px;" method="DELETE" action="/api/follow">
+                            <input type="hidden" name="user_id" value="{{ user_id }}">
+                            <input type="hidden" name="profile_id" value="{{ profile_data.user_id }}">
+                            <!-- This is the profile id of the user you want to unfollow -->
+                            <input type="submit" value="Unfollow" id="followButton">
+                        </form>
+                    {% else %}
+                        <form id="followForm" style="margin-left: 20px;" method="POST" action="/api/follow">
+                            <input type="hidden" name="user_id" value="{{ user_id }}">
+                            <input type="hidden" name="profile_id" value="{{ profile_data.user_id }}">
+                            <!-- This is the profile id of the user you want to follow -->
+                            <input type="submit" value="Follow" id="followButton">
+                        </form>
+                    {% endif %}
+                {% endif %}
+
+
+
+
+   
+
+
+            </div>
+
+            <div class="row my-2" style="text-align: left; margin-left: 10vh;">
+                <div class="col-md-4 text-left">
+                    <h2>{{profile_data.posts}} posts</h2>
+                </div>
+                <div class="col-md-4 text-left">
+                    <h2>{{profile_data.followers}} followers</h2>
+                </div>
+                <div class="col-md-4 text-left">
+                    <h2>{{profile_data.following}} following</h2>
+                </div>
+            </div>
+            <h3 style="text-align: left; margin-left: 10vh;" class ="my-3">{{profile_data.description}}</h3>
+        </div>
+    </div>
 </div>
+
+<style>
+    .post-section {
+        width: 33.33%;
+        float: left;
+        padding: 10px;
+    }
+</style>
+
+
+<div class="container my-5">
+    <div class="row">
+        {% for post in posts %}
+            <div class="post-section">
+                <!-- Your code for each post section goes here -->
+                <!-- For example, you can display the post content -->
+                <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 40vh; height: 40vh; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); padding: 5px;">
+            </div>
+            {% if loop.index % 3 == 0 %}
+                </div>
+                <div class="row">
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}

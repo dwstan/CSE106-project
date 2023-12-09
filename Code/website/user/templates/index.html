@@ -2,6 +2,8 @@
 
 {% block content %}
 <div class="container">
+
+
     <!-- if user is not logged in -->
     {% if not current_user.is_authenticated %}
         <h1 class="display-4 font-weight-bold">
@@ -16,6 +18,9 @@
         <p class="lead">
             Shit poo fuck damnit
         </p>
+
+
+
     {% endif %}
 </div>
 {% endblock %}
