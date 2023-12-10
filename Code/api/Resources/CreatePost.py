@@ -14,6 +14,7 @@ from werkzeug.utils import secure_filename
 
 import os
 import os
+from flask import flash
 
 
 class CreatePost(Resource):
@@ -26,8 +27,27 @@ class CreatePost(Resource):
 
             picture = request.files['picture']
             filename = secure_filename(picture.filename)
+            # os.SEEK_END == 2
+            # seek() return the new absolute position
+            file_length = picture.seek(0, os.SEEK_END)
+            print("file length is ", file_length)
+            # also can use tell() to get current position
+            # file_length = file.tell()
+
+            # seek back to start position of stream, 
+            # otherwise save() will write a 0 byte file
+            # os.SEEK_END == 0
+            picture.seek(0, os.SEEK_SET)
+
+
+
 
             if filename != '':
+                print(f"Uploaded file size: {picture.content_length}")  # Debug print
+                if file_length > 25 * 1024 * 1024:  # 1MB limit for testing
+                    flash('File size exceeds the limit of 25MB.')
+                    return redirect(url_for('user.createpost'))
+
                 picture_path = os.path.join('Code/website/static/uploads', filename)
                 count = 1
                 while os.path.exists(picture_path):
@@ -43,6 +63,8 @@ class CreatePost(Resource):
                 db.session.add(new_post)
                 db.session.commit()
                 return redirect(url_for('user.index'))
+                
+                
         except SQLAlchemyError as e:
             error = str(e.__dict__['orig'])
             return jsonify(error=error), 400

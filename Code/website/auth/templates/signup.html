@@ -8,7 +8,7 @@
             <div class="bg-white p-4 rounded shadow">
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    <div class="alert alert-danger text-white p-4 mb-4">
+                    <div class="alert alert-danger text-black p-4 mb-4">
                         {{ messages[0] }}. Please <a href="{{ url_for('auth.login') }}" class="underline">login</a> to your account if you already have one.
                     </div>
                 {% endif %}

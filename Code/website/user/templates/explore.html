@@ -39,7 +39,11 @@
         </div>
 
 
-        <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 60vh; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+        {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
+            <video src="{{ url_for('static', filename='uploads/' + post.picture) }}" controls style="width: 60vh; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);"></video>
+        {% else %}
+            <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 60vh; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+        {% endif %}
         <div style="width: 60vh; height: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
             <div class="d-flex align-items-center" style = "margin-left: 10px;">
                 <div id="heartToggle{{ post.id }}" class="heart-toggle text-start {{ 'toggled' if post.liked == 1 else '' }}" role="button" tabindex="0" style="font-size: 3vh; margin-left: 10px; margin-top: 5px;">
@@ -56,9 +60,7 @@
 
         <div id="commentArea{{ post.id }}" class="comment-area" style="text-align: left; font-size: 1.7vh; margin-left: 20px; max-height: 10vh; overflow-y: scroll;"></div>
 
-
-
-        <form id="commentForm{{post.id}}" class="comment-form">
+        <form id="commentForm{{post.id}}" class="comment-form my-3">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
