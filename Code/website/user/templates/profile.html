@@ -153,7 +153,7 @@
 
 <div class="container my-5">
     <div class="row">
-        {% for post in posts %}
+        {% for post in timeline|sort(reverse=True, attribute='date') %}
             <div class="post-section">
                 <!-- Your code for each post section goes here -->
                 <!-- For example, you can display the post content -->

@@ -22,7 +22,7 @@
         Explore Page
     </h1>
 
-    {% for post in timeline %}
+    {% for post in timeline|sort(reverse=True, attribute='date') %}
     <div class="post container my-5" style=" width: 60vh;">
     
         <div style="background-color: lightgray; padding: 10px; display: flex; align-items: center; width: 60vh; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
