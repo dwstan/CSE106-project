@@ -27,7 +27,8 @@ class Login(Resource):
 
             # if the above check passes, then we know the user has the right credentials
             login_user(user, remember=remember)
-            return redirect(url_for('user.profile'))
+            return redirect(url_for('user.profile_id', user_name = user.name))
+
         
         except SQLAlchemyError as e:
             error = str(e.__dict__['orig'])

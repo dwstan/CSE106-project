@@ -18,17 +18,26 @@ def index():
 
     else:
         return render_template('index.html')
-
-
-
-
-@user.route('/profile')
+    
+    
+@user.route('/explore')
 @login_required
-def profile():
+def explore():
+    data = requests.get("http://127.0.0.1:5000/api/user/" + str(current_user.id)).json()
+    data2 = requests.get("http://127.0.0.1:5000/api/user").json()
+    data3 = requests.get("http://127.0.0.1:5000/api/explore/" + str(current_user.id)).json()
+    return render_template('explore.html', name=current_user.name, id=current_user.id, profilepicture=data['profilepicture'], users=data2, timeline=data3)
 
-    data = requests.get("http://127.0.0.1:5000/api/profile/" + str(current_user.name)).json()
-    data3 = requests.get("http://127.0.0.1:5000/api/profileposts/" + str(current_user.id)).json()
-    return render_template('profile.html', user_id=current_user.id, profile_data = data, posts = data3)
+
+
+
+# @user.route('/profile')
+# @login_required
+# def profile():
+
+#     data = requests.get("http://127.0.0.1:5000/api/profile/" + str(current_user.name)).json()
+#     data3 = requests.get("http://127.0.0.1:5000/api/profileposts/" + str(current_user.id)).json()
+#     return render_template('profile.html', user_id=current_user.id, profile_data = data, posts = data3)
 
 
 @user.route('/profile/<string:user_name>')

@@ -32,7 +32,7 @@ class Comment(db.Model):
     comment = db.Column(db.String(1000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    date = db.Column(db.Integer, default=time())
+    date = db.Column(db.String(100))
 
 class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
