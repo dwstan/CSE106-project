@@ -4,7 +4,14 @@
 {% block content %}
 <script>
     timeline = "{{ timeline | tojson | safe }}"
+    user_id = {{user_id}}
+
+   
 </script>
+
+
+
+
 
 <div class="container">
     <script>
@@ -25,7 +32,7 @@
                 </a>
             </div>
             <div style="margin-left: 10px;">
-                <a href="{{ url_for('user.profile_id', user_name = post.name) }}" class="text-decoration-none font-weight-bold text-black" style="font-size: 2.5vh;">
+                <a href="{{ url_for('user.profile_id', user_name = post.name) }}" class="text-decoration-none font-weight-bold text-black" style="font-size: 3vh;">
                     {{ post.name }}
                 </a>
             </div>
@@ -34,16 +41,77 @@
 
         <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 60vh; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
         <div style="width: 60vh; height: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
-            <div style="display: flex; align-items: center;">
-                <button style="margin-right: 10px; margin-left: 20px; margin-top: 20px;">Like Post</button>
+            <div class="d-flex align-items-center">
+                <div id="heartToggle{{ post.id }}" class="heart-toggle text-start {{ 'toggled' if post.liked == 1 else '' }}" role="button" tabindex="0" style="font-size: 3vh; margin-left: 10px; margin-top: 5px;">
+                    <i class="fa fa-heart" aria-hidden="true"></i> <!-- Using Font Awesome for heart icon -->
+                </div>
+                <div id="likeCount{{post.id}}" class="ms-2 align-self-center" style="font-size: 3vh; margin-top: 2px;">
+                    {{post.like_count}} likes
+                </div>
             </div>
-            <p style="text-align: left; font-size: 2vh; margin-left: 20px;">{{post.name}} - {{ post.description }}</p>
+        <p style="text-align: left; font-size: 2vh; margin-left: 20px;">{{ post.name }} - {{ post.description }}</p>
+    </div>
+
+            
+
+
+
+
+
+
+
 
         </div>
     
     </div>
     {% endfor %}
 
+
+
+    <script>
+
+document.querySelectorAll('.heart-toggle').forEach(function(heartToggle) {
+    heartToggle.addEventListener('click', function() {
+        var postId = this.id.replace('heartToggle', ''); // Extract post ID from the element's ID
+        this.classList.toggle('toggled');
+
+        var data = { 
+            post_id: postId, 
+            user_id: {{id}} // Assuming user_id is a global variable
+        };
+
+        if (this.classList.contains('toggled')) {
+            // Make POST API call
+            fetch('api/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                $('#likeCount' + postId).text(data.likeCount + ' likes'); // Update the like count using jQuery
+            });
+        } else {
+            // Make DELETE API call
+            fetch('api/like', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                $('#likeCount' + postId).text(data.likeCount + ' likes'); // Update the like count using jQuery
+            });
+        }
+    });
+});
+</script>
 </div>
 {% endblock %}
         

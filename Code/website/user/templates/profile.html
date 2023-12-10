@@ -9,43 +9,40 @@
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $("#followForm").submit(function(event) {
-            event.preventDefault(); // Prevent the default form submission behavior
-            // Perform your AJAX request or other actions here
-            // Example using AJAX:
-            $.ajax({
-                type: "POST",
-                url: "/api/follow",
-                data: $("#followForm").serialize(), // Serialize the form data
-                success: function(response) {
-                    // Handle the response as needed
-                    // For example, you can update the UI to indicate that the follow action was successful
-                    location.reload()
-                },
-                error: function(err) {
-                    // Handle errors if the request fails
-                }
-            });
+        $(document).ready(function() {
+            
+            $("#contentToUpdate").on("submit", "#followForm, #unfollowForm", function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+        var $form = $(this);
+
+        // Determine the current button text
+        var buttonText = $form.find("input[type=submit]").val();
+
+        // Determine the HTTP method
+        var method = buttonText === "Follow" ? "POST" : "DELETE";
+
+        // Perform your AJAX request
+        $.ajax({
+            type: method,
+            url: "/api/follow",
+            data: $form.serialize(), // Serialize the form data
+            success: function(response) {
+                // Handle the response as needed
+                // Update the follower count
+                $("#followerCount").text(response.followerCount + " followers");
+
+                // Toggle the button text
+                $form.find("input[type=submit]").val(buttonText === "Follow" ? "Unfollow" : "Follow");
+            },
+            error: function(err) {
+                // Handle errors if the request fails
+            }
         });
-        $("#unfollowForm").submit(function(event) {
-            event.preventDefault(); // Prevent the default form submission behavior
-            // Perform your AJAX request or other actions here
-            // Example using AJAX:
-            $.ajax({
-                type: "DELETE",
-                url: "/api/follow",
-                data: $("#unfollowForm").serialize(), // Serialize the form data
-                success: function(response) {
-                    // Handle the response as needed
-                    // For example, you can update the UI to indicate that the follow action was successful
-                    location.reload()
-                },
-                error: function(err) {
-                    // Handle errors if the request fails
-                }
-            });
-        });
+    });
+
+
+
+
     });
 </script>
 <div class="container my-5">
@@ -102,12 +99,13 @@
                     <button style="margin-left: 20px;">Edit Profile</button>
                 </a>
                 {% else %}
+                <div id="contentToUpdate">
                     {% if following.count == 1 %}
                         <form id="unfollowForm" style="margin-left: 20px;" method="DELETE" action="/api/follow">
                             <input type="hidden" name="user_id" value="{{ user_id }}">
                             <input type="hidden" name="profile_id" value="{{ profile_data.user_id }}">
                             <!-- This is the profile id of the user you want to unfollow -->
-                            <input type="submit" value="Unfollow" id="followButton">
+                            <input type="submit" value="Unfollow" id="unfollowButton">
                         </form>
                     {% else %}
                         <form id="followForm" style="margin-left: 20px;" method="POST" action="/api/follow">
@@ -117,6 +115,7 @@
                             <input type="submit" value="Follow" id="followButton">
                         </form>
                     {% endif %}
+                </div>
                 {% endif %}
 
 
@@ -132,7 +131,7 @@
                     <h2>{{profile_data.posts}} posts</h2>
                 </div>
                 <div class="col-md-4 text-left">
-                    <h2>{{profile_data.followers}} followers</h2>
+                    <h2 id="followerCount">{{profile_data.followers}} followers</h2>
                 </div>
                 <div class="col-md-4 text-left">
                     <h2>{{profile_data.following}} following</h2>

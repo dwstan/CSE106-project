@@ -27,7 +27,6 @@ class Signup(Resource):
             email = request.form.get('email')
             name = request.form.get('name')
             password = request.form.get('password')
-            print(name, "banana")
 
             user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
             nameInUse = User.query.filter_by(name=name).first() # if this returns a user, then the username already exists in database

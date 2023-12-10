@@ -15,12 +15,29 @@ class Timeline(Resource):
     def get(self, user_id):
         try: 
             sql = text("""
-                SELECT post.id, post.picture, post.description, post.date, user.name, user.profilepicture
-                FROM post, follow, user   
-                WHERE user.id = follow.followed_id
-                AND follow.follower_id = :profile_id
-                AND post.user_id = follow.followed_id
-                ORDER BY post.date DESC
+            SELECT 
+                post.id, 
+                post.picture, 
+                post.description, 
+                post.date, 
+                user.name, 
+                user.profilepicture,
+                COALESCE(like_count.likes, 0) as like_count,
+                CASE WHEN user_like.post_id IS NOT NULL THEN 1 ELSE 0 END as liked
+            FROM 
+                post
+            JOIN 
+                follow ON post.user_id = follow.followed_id
+            JOIN 
+                user ON user.id = follow.followed_id
+            LEFT JOIN 
+                (SELECT post_id, COUNT(*) as likes FROM like GROUP BY post_id) as like_count ON post.id = like_count.post_id
+            LEFT JOIN 
+                (SELECT post_id FROM like WHERE user_id = :profile_id) as user_like ON post.id = user_like.post_id
+            WHERE 
+                follow.follower_id = :profile_id
+            ORDER BY 
+                post.date DESC
             """)
             input_params = {'profile_id': user_id}
             results = db.session.execute(sql, input_params)
@@ -33,11 +50,13 @@ class Timeline(Resource):
                     'description': result[2],
                     'date': result[3],
                     'name': result[4],
-                    'profilepicture': result[5]
+                    'profilepicture': result[5],
+                    'like_count': result[6],
+                    'liked': result[7]  # Add the liked field here
                 }
                 posts.append(post)
             return jsonify(posts)
-        
+                
 
 
         except SQLAlchemyError as e:

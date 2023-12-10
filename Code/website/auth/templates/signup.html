@@ -40,7 +40,7 @@
                     function validateForm() {
                         var nameInput = document.getElementById("nameInput");
                         var nameError = document.getElementById("nameError");
-                        var nameRegex = /^[a-zA-Z0-9]+$/; // Only allow letters and numbers
+                        var nameRegex = /^[a-zA-Z0-9_.]+$/; // Only allow letters, numbers, underscores, and periods
 
                         if (!nameRegex.test(nameInput.value)) {
                             nameError.textContent = "Name can only contain letters and numbers";

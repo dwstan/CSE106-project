@@ -12,30 +12,31 @@ from flask_uploads import UploadNotAllowed
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
 
-class Follow(Resource):
+class Like(Resource):
     def delete(self):
         try:
-            follower_id = request.form.get('user_id')
-            followed_id = request.form.get('profile_id')
+            data = request.get_json()
+            user_id = data.get('user_id')
+            post_id = data.get('post_id')
 
-            # Delete the follow relationship
+            # Delete the like relationship
             sql_delete = text("""
-                DELETE FROM follow WHERE follower_id = :follower_id AND followed_id = :followed_id
+                DELETE FROM like WHERE user_id = :user_id AND post_id = :post_id
             """)
-            input_params = {'follower_id': follower_id, 'followed_id': followed_id}
+            input_params = {'user_id': user_id, 'post_id': post_id}
             db.session.execute(sql_delete, input_params)
             db.session.commit()
 
-            # Get the updated follower count
+            # Get the updated like count
             sql_count = text("""
-                SELECT COUNT(*) FROM follow WHERE followed_id = :followed_id
+                SELECT COUNT(*) FROM like WHERE post_id = :post_id
             """)
-            count_params = {'followed_id': followed_id}
-            follower_count = db.session.execute(sql_count, count_params).scalar()
+            count_params = {'post_id': post_id}
+            like_count = db.session.execute(sql_count, count_params).scalar()
 
             # Return a JSON response as a dictionary
             response_data = {
-                "followerCount": follower_count
+                "likeCount": like_count
             }
             
             return jsonify(response_data)
@@ -47,37 +48,38 @@ class Follow(Resource):
 
     def post(self):
         try:
-            follower_id = request.form.get('user_id')
-            followed_id = request.form.get('profile_id')
+            data = request.get_json()
+            user_id = data.get('user_id')
+            post_id = data.get('post_id')
 
-            # Check if the follow relationship already exists
+            # Check if the like relationship already exists
             sql_check = text("""
-                SELECT COUNT(*) FROM follow WHERE follower_id = :follower_id AND followed_id = :followed_id
+                SELECT COUNT(*) FROM like WHERE user_id = :user_id AND post_id = :post_id
             """)
 
-            check_params = {'follower_id': follower_id, 'followed_id': followed_id}
+            check_params = {'user_id': user_id, 'post_id': post_id}
             result = db.session.execute(sql_check, check_params).scalar()
 
             if result == 0:
-                # Insert the follow relationship if it doesn't exist
+                # Insert the like relationship if it doesn't exist
                 sql_insert = text("""
-                    INSERT INTO follow (follower_id, followed_id) VALUES (:follower_id, :followed_id)
+                    INSERT INTO like (user_id, post_id) VALUES (:user_id, :post_id)
                 """)
 
-                insert_params = {'follower_id': follower_id, 'followed_id': followed_id}
+                insert_params = {'user_id': user_id, 'post_id': post_id}
                 db.session.execute(sql_insert, insert_params)
                 db.session.commit()
 
-            # Get the updated follower count
+            # Get the updated like count
             sql_count = text("""
-                SELECT COUNT(*) FROM follow WHERE followed_id = :followed_id
+                SELECT COUNT(*) FROM like WHERE post_id = :post_id
             """)
-            count_params = {'followed_id': followed_id}
-            follower_count = db.session.execute(sql_count, count_params).scalar()
+            count_params = {'post_id': post_id}
+            like_count = db.session.execute(sql_count, count_params).scalar()
 
             # Return a JSON response as a dictionary
             response_data = {
-                "followerCount": follower_count
+                "likeCount": like_count
             }
 
             return jsonify(response_data)

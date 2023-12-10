@@ -2,3 +2,18 @@
   background-color: #f14668;
   color: #fff;
 }
+
+
+.heart-toggle {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 24px; /* Adjust size as needed */
+}
+
+.heart-toggle .fa-heart {
+  color: gray; /* Initial color */
+}
+
+.heart-toggle.toggled .fa-heart {
+  color: red; /* Color when toggled */
+}

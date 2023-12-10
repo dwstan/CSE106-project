@@ -10,7 +10,7 @@ from api.Resources.Follow import Follow
 from api.Resources.Following import Following
 from api.Resources.ProfilePosts import ProfilePosts
 from api.Resources.Timeline import Timeline
-
+from api.Resources.Like import Like
 
 def create_api(app):
     api = Api(app)
@@ -25,6 +25,7 @@ def create_api(app):
     api.add_resource(Following, '/api/following/<int:user_id>/<int:profile_id>')
     api.add_resource(ProfilePosts, '/api/profileposts/<int:profile_id>')
     api.add_resource(Timeline, '/api/timeline/<int:user_id>')
+    api.add_resource(Like, '/api/like')
 
 
 
