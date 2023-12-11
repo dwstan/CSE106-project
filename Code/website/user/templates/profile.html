@@ -31,8 +31,12 @@
                 // Update the follower count
                 $("#followerCount").text(response.followerCount + " followers");
 
+                var $submitButton = $form.find("input[type=submit]");
+                // Change the background color of the button
+                $submitButton.css("background-color", buttonText === "Follow" ? "gray" : "dodgerBlue");
+
                 // Toggle the button text
-                $form.find("input[type=submit]").val(buttonText === "Follow" ? "Unfollow" : "Follow");
+                $submitButton.val(buttonText === "Follow" ? "Unfollow" : "Follow");                
             },
             error: function(err) {
                 // Handle errors if the request fails
@@ -96,7 +100,19 @@
 
                 {% if user_id == profile_data.user_id %}
                 <a href="{{ url_for('user.index') }}">
-                    <button style="margin-left: 20px;">Edit Profile</button>
+                    <button style="margin-left: 20px;
+                        background-color: gray;
+                        color: #fff;
+                        border: none;
+                        border-radius: 6px;
+                        padding: 7px 20px;
+                        cursor: pointer;
+                        font-size: 25px;
+                        display: inline-flex;
+                        align-items: center;">
+                            <i class="fa-solid fa-pen-to-square" style="margin-right: 5px;"></i>
+                            Edit Profile
+                    </button>
                 </a>
                 {% else %}
                 <div id="contentToUpdate">
@@ -105,14 +121,28 @@
                             <input type="hidden" name="user_id" value="{{ user_id }}">
                             <input type="hidden" name="profile_id" value="{{ profile_data.user_id }}">
                             <!-- This is the profile id of the user you want to unfollow -->
-                            <input type="submit" value="Unfollow" id="unfollowButton">
+                            <input type="submit" value="Unfollow" id="unfollowButton" style="
+                                background-color: gray;
+                                color: #fff;
+                                border: none;
+                                border-radius: 6px;
+                                padding: 7px 25px;
+                                cursor: pointer;
+                                font-size: 25px;">
                         </form>
                     {% else %}
                         <form id="followForm" style="margin-left: 20px;" method="POST" action="/api/follow">
                             <input type="hidden" name="user_id" value="{{ user_id }}">
                             <input type="hidden" name="profile_id" value="{{ profile_data.user_id }}">
                             <!-- This is the profile id of the user you want to follow -->
-                            <input type="submit" value="Follow" id="followButton">
+                            <input type="submit" value="Follow" id="followButton" style="
+                                background-color: dodgerblue;
+                                color: #fff;
+                                border: none;
+                                border-radius: 6px;
+                                padding: 7px 25px;
+                                cursor: pointer;
+                                font-size: 25px;">
                         </form>
                     {% endif %}
                 </div>
@@ -126,7 +156,7 @@
 
             </div>
 
-            <div class="row my-2" style="text-align: left; margin-left: 10vh;">
+            <div class="row my-4" style="text-align: left; margin-left: 10vh; margin-top: 10vh;">
                 <div class="col-md-4 text-left">
                     <h2>{{profile_data.posts}} posts</h2>
                 </div>

@@ -3,6 +3,17 @@
   color: #fff;
 }
 
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.outstagramlogo {
+  height: 35px;
+  width: 35px;
+  object-fit: cover;
+  margin-right: 3px;
+}
 
 .heart-toggle {
   cursor: pointer;
@@ -19,4 +30,9 @@
 
 html {
   overflow-y: scroll;
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
 }
