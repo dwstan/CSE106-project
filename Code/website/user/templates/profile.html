@@ -153,8 +153,12 @@
 
 <div class="container my-5">
     <div class="row">
-        {% for post in timeline|sort(reverse=True, attribute='date') %}
+        <script>
+            console.log("hi")
+        </script>
+        {% for post in posts|sort(reverse=True, attribute='date') %}
             <div class="post-section">
+
                 <!-- Your code for each post section goes here -->
                 <!-- For example, you can display the post content -->
                 {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
