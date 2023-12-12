@@ -190,14 +190,17 @@
         {% for post in posts|sort(reverse=True, attribute='date') %}
             <div class="post-section">
 
-                <!-- Your code for each post section goes here -->
-                <!-- For example, you can display the post content -->
-                <a href="{{ url_for('user.post', post_id = post.id )}}" class="nav-link">
-                {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
-                    <video src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Video" style="width: 40vh; height: 40vh; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); padding: 5px;" controls></video>
-                {% else %}
-                    <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 40vh; height: 40vh; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); padding: 5px;">
-                {% endif %}
+                <a href="{{ url_for('user.post', post_id = post.id )}}" class="nav-link video-container">
+                    {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
+                    
+                    <div class="video-wrapper">
+
+                        <video src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Video" class="overlay-image"></video>
+                        <div class="play-button" onclick="window.location.href='{{ url_for('user.post', post_id = post.id )}}'"></div>
+                    </div>
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" class="profile-picture">
+                    {% endif %}
                 </a>
                 </div>
             {% if loop.index % 3 == 0 %}
