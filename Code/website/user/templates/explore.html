@@ -13,7 +13,7 @@
 
 
 
-<div class="container">
+<div class="container my-5">
     <script>
         profilepicture = "{{ profilepicture }}"
     </script>
@@ -21,79 +21,41 @@
     <h1 class="display-4 font-weight-bold text-center">
         Explore Page
     </h1>
-
-    {% for post in timeline|sort(reverse=True, attribute='date') %}
-    <div class="post container my-5" style=" width: 60vh;">
+    <style>
+        .post-section {
+            width: 33.33%;
+            float: left;
+            padding: 10px;
+        }
+    </style>
     
-        <div style="background-color: lightgray; padding: 10px; display: flex; align-items: center; width: 60vh; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
-            <div>
-                <a href="{{ url_for('user.profile_id', user_name = post.name) }}">
-                    <img src="{{ url_for('static', filename='uploads/' + post.profilepicture) }}" alt="Profile Picture" style="width: 10vh; height: 10vh; object-fit: cover; border-radius: 50%;">
-                </a>
-            </div>
-            <div style="margin-left: 10px;">
-                <a href="{{ url_for('user.profile_id', user_name = post.name) }}" class="text-decoration-none font-weight-bold text-black" style="font-size: 3vh;">
-                    <strong>{{ post.name }}</strong>
-                </a>
-            </div>
-        </div>
+    
+    <div class="container my-5">
+        <div class="row">
+            <script>
+                console.log("hi")
+            </script>
+            {% for post in timeline|sort(reverse=True, attribute='date') %}
+                <div class="post-section">
 
-
-        {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
-            <video src="{{ url_for('static', filename='uploads/' + post.picture) }}" controls style="width: 60vh; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);"></video>
-        {% else %}
-            <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 60vh; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
-        {% endif %}
-        <div style="width: 60vh; height: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
-            <div class="d-flex align-items-center" style = "margin-left: 10px;">
-                <div id="heartToggle{{ post.id }}" class="heart-toggle text-start {{ 'toggled' if post.liked == 1 else '' }}" role="button" tabindex="0" style="font-size: 3vh; margin-left: 10px; margin-top: 5px;">
-                    <i class="fa fa-heart" aria-hidden="true"></i> <!-- Using Font Awesome for heart icon -->
-                </div>
-                <div id="likeCount{{post.id}}" class="ms-2 align-self-center" style="font-size: 3vh; margin-top: 2px;">
-                    {{post.like_count}} likes
-                </div>
-            </div>
-        <p style="text-align: left; font-size: 2.4vh; margin-left: 20px;"><strong>{{ post.name }}</strong> {{ post.description }}</p>
-        <p style="text-align: left; font-size: 2.1vh; margin-left: 20px;">Comments:</p>
-
-
-
-        <div id="commentArea{{ post.id }}" class="comment-area" style="text-align: left; font-size: 1.7vh; margin-left: 20px; max-height: 10vh; overflow-y: scroll;"></div>
-
-        <form id="commentForm{{post.id}}" class="comment-form my-3">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <input type="text" class="form-control" placeholder="Add a comment">
-                        <!-- Invisible submit button -->
-                        <button type="submit" style="display: none;"></button>
-        
-                        <!-- Hidden inputs -->
-                        <input type="hidden" name="id" value="{{id}}">
-                        <input type="hidden" name="postId" value="{{post.id}}">
+    
+                    <!-- Your code for each post section goes here -->
+                    <!-- For example, you can display the post content -->
+                    <a href="{{ url_for('user.post', post_id = post.id )}}" class="nav-link">
+                    {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
+                        <video src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Video" style="width: 40vh; height: 40vh; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); padding: 5px;" controls></video>
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 40vh; height: 40vh; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); padding: 5px;">
+                    {% endif %}
+                    </a>
                     </div>
-                </div>
-            </div>
-        </form>
-            
-
-        <br>
-    </div>
-
-            
-
-
-
-
-
-
-
-
+                {% if loop.index % 3 == 0 %}
+                    </div>
+                    <div class="row">
+                {% endif %}
+            {% endfor %}
         </div>
-    
     </div>
-    {% endfor %}
-
 
 
     <script>

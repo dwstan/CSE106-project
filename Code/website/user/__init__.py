@@ -57,3 +57,21 @@ def profile_id(user_name):
 def createpost():
     data = requests.get("http://127.0.0.1:5000/api/user/" + str(current_user.id)).json()
     return render_template('createpost.html', name=current_user.name, user_id=current_user.id, profilepicture=data['profilepicture'])
+
+@user.route('/editprofile')
+@login_required
+def editprofile():
+    # data = requests.get("http://
+    pass
+
+@user.route('/post/<int:post_id>')
+@login_required
+def post(post_id):
+
+    
+
+        data = requests.get("http://127.0.0.1:5000/api/user/" + str(current_user.id)).json()
+        data2 = requests.get("http://127.0.0.1:5000/api/user").json()
+        data3 = requests.get("http://127.0.0.1:5000/api/timeline/" + str(current_user.id)).json()
+        data4 = requests.get("http://127.0.0.1:5000/api/post/" + str(post_id) + "/" + str(current_user.id)).json()
+        return render_template('post.html', name=current_user.name, id=current_user.id, profilepicture=data['profilepicture'], users=data2, timeline=data4)

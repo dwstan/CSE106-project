@@ -1,0 +1,254 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+    timeline = "{{ timeline | tojson | safe }}"
+    user_id = {{user_id}}
+
+   
+</script>
+
+<div class="container">
+    {% for post in timeline|sort(reverse=True, attribute='date') %}
+    <div class="post container my-5" style=" width: 30vw;">
+    
+        <div style="background-color: lightgray; padding: 10px; display: flex; align-items: center; width: 30vw; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+            <div>
+                <a href="{{ url_for('user.profile_id', user_name = post.name) }}">
+                    <img src="{{ url_for('static', filename='uploads/' + post.profilepicture) }}" alt="Profile Picture" style="width: 10vh; height: 10vh; object-fit: cover; border-radius: 50%;">
+                </a>
+            </div>
+            <div style="margin-left: 10px;">
+                <a href="{{ url_for('user.profile_id', user_name = post.name) }}" class="text-decoration-none font-weight-bold text-black" style="font-size: 3vh;">
+                    <strong>{{ post.name }}</strong>
+                </a>
+            </div>
+        </div>
+
+
+
+        {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
+            <video src="{{ url_for('static', filename='uploads/' + post.picture) }}" controls style="width: 30vw; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);"></video>
+        {% else %}
+            <img src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Profile Picture" style="width: 30vw; height: auto; object-fit: cover; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+        {% endif %}
+        <div style="width: 30vw; height: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+            <div class="d-flex align-items-center" style = "margin-left: 10px;">
+                <div id="heartToggle{{ post.id }}" class="heart-toggle text-start {{ 'toggled' if post.liked == 1 else '' }}" role="button" tabindex="0" style="font-size: 3vh; margin-left: 10px; margin-top: 5px;">
+                    <i class="fa fa-heart" aria-hidden="true"></i> 
+                </div>
+                <div id="likeCount{{post.id}}" class="ms-2 align-self-center" style="font-size: 3vh; margin-top: 2px;">
+                    {{post.like_count}} likes
+                </div>
+            </div>
+            <p style="text-align: left; font-size: 2.4vh; margin-left: 20px;"><strong>{{ post.name }}</strong> {{ post.description }}</p>
+            <p style="text-align: left; font-size: 2.1vh; margin-left: 20px;">Comments:</p>
+
+
+        
+
+
+            <div id="commentArea{{ post.id }}" class="comment-area" style="text-align: left; font-size: 1.7vh; margin-left: 20px; max-height: 10vh; overflow-y: scroll;"></div>
+
+
+
+            <form id="commentForm{{post.id}}" class="comment-form my-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" placeholder="Add a comment">
+
+                            <button type="submit" style="display: none;"></button>
+
+                            <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="postId" value="{{post.id}}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br>
+        </div> 
+
+            
+
+
+
+
+
+    {% endfor %}
+
+</div>
+
+
+   <script>
+
+
+    $(document).ready(function() {
+        // Function to fetch and display comments for a given post ID
+        function fetchAndDisplayComments(postId) {
+            $.ajax({
+                url: `/api/comment/post/${postId}`,
+                type: 'GET',
+                success: function(comments) {
+                    // Assuming 'comments' is an array of comment objects
+                    let commentsHtml = '';
+                    comments.forEach(comment => {
+                        commentsHtml += `<div class="comment" style="margin-bottom: 0px; padding: 0px;">
+                                        <p><strong>${comment.name}</strong> ${comment.comment}</p>
+                                        </div>`;
+                    });
+
+                    // Select the comment area and clear existing content
+                    const commentArea = $(`#commentArea${postId}`);
+                    commentArea.empty();
+
+                    // Update the comment area with new HTML
+                    commentArea.html(commentsHtml);
+                },
+                error: function(error) {
+                    console.error('Error fetching comments:', error);
+                }
+            });
+        }
+
+        // Iterate over each comment area and fetch comments
+        $('.comment-area').each(function() {
+            const postId = this.id.match(/\d+/)[0]; // Extract postId from ID
+            fetchAndDisplayComments(postId);
+        });
+    });
+
+
+
+
+
+
+
+
+
+    function fetchAndDisplayComments(postId) {
+            $.ajax({
+                url: `/api/comment/post/${postId}`,
+                type: 'GET',
+                success: function(comments) {
+                    // Assuming 'comments' is an array of comment objects
+                    let commentsHtml = '';
+                    comments.forEach(comment => {
+                        commentsHtml += `<div class="comment" style="margin-bottom: 0px; padding: 0px;">
+                                        <p><strong>${comment.name}</strong> ${comment.comment}</p>
+                                        </div>`;
+                    });
+
+                    // Select the comment area and clear existing content
+                    const commentArea = $(`#commentArea${postId}`);
+                    commentArea.empty();
+
+                    // Update the comment area with new HTML
+                    commentArea.html(commentsHtml);
+                },
+                error: function(error) {
+                    console.error('Error fetching comments:', error);
+                }
+            });
+        }
+
+
+
+
+    document.querySelectorAll('.comment-form').forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        var commentText = this.querySelector('.form-control').value; // Get the comment text
+        this.querySelector('.form-control').value = ''; // Set the form-control value to ''
+        var idValue = this.querySelector('input[name="id"]').value; // Get the value of the hidden input for id
+        var postIdValue = this.querySelector('input[name="postId"]').value; // Get the value of the hidden input for postId
+
+        // Prepare data to be sent as JSON
+        var data = {
+            comment: commentText,
+            user_id: idValue,
+            post_id: postIdValue
+        };
+
+        // Use fetch to send data
+        fetch('/api/comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Error submitting comment');
+            }
+        })
+        .then(data => {
+            // Handle success
+            fetchAndDisplayComments(postIdValue); // Fetch and display comments for the post
+        })
+        .catch(error => {
+            // Handle errors
+            alert(error.message);
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+document.querySelectorAll('.heart-toggle').forEach(function(heartToggle) {
+    heartToggle.addEventListener('click', function() {
+        var postId = this.id.replace('heartToggle', ''); // Extract post ID from the element's ID
+        this.classList.toggle('toggled');
+
+        var data = { 
+            post_id: postId, 
+            user_id: {{id}} // Assuming user_id is a global variable
+        };
+
+        if (this.classList.contains('toggled')) {
+            // Make POST API call
+            fetch('api/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                $('#likeCount' + postId).text(data.likeCount + ' likes'); // Update the like count using jQuery
+            });
+        } else {
+            // Make DELETE API call
+            fetch('api/like', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                $('#likeCount' + postId).text(data.likeCount + ' likes'); // Update the like count using jQuery
+            });
+        }
+    });
+});
+</script> 
+
+
+{% endblock %}
+        

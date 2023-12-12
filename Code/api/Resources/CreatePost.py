@@ -39,6 +39,7 @@ class CreatePost(Resource):
             # os.SEEK_END == 0
             picture.seek(0, os.SEEK_SET)
 
+            current_time = datetime.datetime.now()
 
 
 
@@ -58,7 +59,7 @@ class CreatePost(Resource):
 
                 picture.save(picture_path)
                 picture_filename = filename            
-                new_post = Post(user_id=user_id, description=description , picture=picture_filename)
+                new_post = Post(user_id=user_id, description=description , picture=picture_filename, date = current_time)
                 
                 db.session.add(new_post)
                 db.session.commit()
