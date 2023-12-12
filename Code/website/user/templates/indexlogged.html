@@ -96,32 +96,36 @@
 
     $(document).ready(function() {
         // Function to fetch and display comments for a given post ID
+        var userProfileBaseUrl = "{{ url_for('user.profile_id', user_name='') }}";
+
         function fetchAndDisplayComments(postId) {
-            $.ajax({
-                url: `/api/comment/post/${postId}`,
-                type: 'GET',
-                success: function(comments) {
-                    // Assuming 'comments' is an array of comment objects
-                    let commentsHtml = '';
-                    comments.forEach(comment => {
-                        commentsHtml += `<div class="comment" style="margin-bottom: 0px; padding: 0px;">
-                                        <p><strong>${comment.name}</strong> ${comment.comment}</p>
-                                        </div>`;
-                    });
+        $.ajax({
+            url: `/api/comment/post/${postId}`,
+            type: 'GET',
+            success: function(comments) {
+                let commentsHtml = '';
+                comments.forEach(comment => {
+                    // Create the user profile URL
+                    var userProfileUrl = userProfileBaseUrl + comment.name;
 
-                    // Select the comment area and clear existing content
-                    const commentArea = $(`#commentArea${postId}`);
-                    commentArea.empty();
+                    // Append the comment HTML
+                    commentsHtml += `<div class="comment" style="margin-bottom: 0px; padding: 0px;">
+                        <p><strong><a href="${userProfileUrl}" style="color: black; text-decoration: none;">${comment.name}</a></strong> ${comment.comment}</p>
+                    </div>`;
+                });
 
-                    // Update the comment area with new HTML
-                    commentArea.html(commentsHtml);
-                },
-                error: function(error) {
-                    console.error('Error fetching comments:', error);
-                }
-            });
-        }
+                // Select the comment area and clear existing content
+                const commentArea = $(`#commentArea${postId}`);
+                commentArea.empty();
 
+                // Update the comment area with new HTML
+                commentArea.html(commentsHtml);
+            },
+            error: function(error) {
+                console.error('Error fetching comments:', error);
+            }
+    });
+}
         // Iterate over each comment area and fetch comments
         $('.comment-area').each(function() {
             const postId = this.id.match(/\d+/)[0]; // Extract postId from ID
