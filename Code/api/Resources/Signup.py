@@ -68,3 +68,6 @@ class Signup(Resource):
         except SQLAlchemyError as e:
             error = str(e.__dict__['orig'])
             return jsonify(error=error), 400
+
+
+

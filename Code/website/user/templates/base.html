@@ -17,17 +17,17 @@
 <body>
     <section class="hero min-vh-100">
 
-        <div class="hero-head">
+        <div class="hero-head"></div>
             <nav class="navbar navbar-expand-lg navbar-light bg-secondary"> <!-- Updated class here -->
                 <div class="container">
                     <a class="navbar-brand" href="{{ url_for('user.index') }}">
                         <img class="outstagramlogo" src="{{ url_for('static', filename='css/outstagram_logo.png') }}">
                         Outstagram
                     </a> <!-- Added navbar-brand with "Notstagram" text -->
+                    
                     <div id="navbarMenuHeroA" class="navbar-collapse collapse">
                         <ul class="navbar-nav ms-auto">
                             {% if current_user.is_authenticated %}
-
                             <li class="nav-item">
                                 <a href="{{ url_for('user.explore')}}" class="nav-link">
                                     <i class="fa-solid fa-compass"></i>

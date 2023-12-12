@@ -61,8 +61,8 @@ def createpost():
 @user.route('/editprofile')
 @login_required
 def editprofile():
-    # data = requests.get("http://
-    pass
+    data = requests.get("http://127.0.0.1:5000/api/profile/" + str(current_user.name)).json()
+    return render_template('editprofile.html', name=current_user.name, user_id=current_user.id, profile = data)
 
 @user.route('/post/<int:post_id>')
 @login_required

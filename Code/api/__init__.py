@@ -15,6 +15,7 @@ from api.Resources.Comment import Comment
 from api.Resources.CommentPost import CommentPost
 from api.Resources.Explore import Explore
 from api.Resources.PostDetail import PostDetail
+from api.Resources.EditProfile import EditProfile
 
 
 
@@ -36,6 +37,7 @@ def create_api(app):
     api.add_resource(Comment, '/api/comment')
     api.add_resource(CommentPost, '/api/comment/post/<int:post_id>')
     api.add_resource(PostDetail, '/api/post/<int:post_id>/<int:user_id>')
+    api.add_resource(EditProfile, '/api/editprofile')
 
 
 

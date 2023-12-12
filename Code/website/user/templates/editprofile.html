@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+    profile = "{{ profile | tojson | safe }}"
+</script>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 my-5">
+            <h3 class="text-2xl font-bold mb-4">Edit Profile</h3>
+            <div class="bg-white p-4 rounded shadow">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-danger text-black p-4 mb-4">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+                {% endwith %}
+                <form id="myForm"  method="POST" action="/api/editprofile"enctype="multipart/form-data" onsubmit="return validateForm()">
+
+                    <div class="mb-4">
+                        <input class="form-control" type="text" name="name" id="nameInput" placeholder="Username" autofocus="" value="{{profile.name}}">
+                        <small id="nameError" style="color: red;"></small>
+                    </div>
+
+                    <input type="hidden" name="user_id" value="{{user_id}}">
+
+                    <div class="mb-4">
+                        <div class="mb-4">
+                            {% if profile.description %}
+                                <textarea class="form-control" name="description" placeholder="Description">{{ profile.description }}</textarea>
+                            {% else %}
+                                <textarea class="form-control" name="description" placeholder="Description"></textarea>
+                            {% endif %}
+                        </div>
+
+                    <div class="mb-4">
+                        <label for="profilePicture">Change Profile Picture:</label>
+                        <input class="form-control" type="file" id="profilePicture" name="picture" accept="image/*">
+                    </div>
+
+                    <button class="btn btn-primary btn-block">Edit Profile</button>
+                </form>
+
+                <script>
+
+                    function validateForm() {
+                        var nameInput = document.getElementById("nameInput");
+                        var nameError = document.getElementById("nameError");
+                        var nameRegex = /^[a-zA-Z0-9_.]+$/; // Only allow letters, numbers, underscores, and periods
+
+                        if (!nameRegex.test(nameInput.value)) {
+                            nameError.textContent = "Name can only contain letters and numbers";
+                            return false; // Prevent form submission
+                        }
+
+                        return true; // Allow form submission
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+                        
