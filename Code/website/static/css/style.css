@@ -85,6 +85,15 @@ html {
   object-fit: cover;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
+
+
+.profile-picture-search {
+  width: 35vh;
+  height: 35vh;
+  object-fit: cover;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
 .video-container .play-button {
   position: absolute;
   top: 50%;
