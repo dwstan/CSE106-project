@@ -16,17 +16,11 @@
         Search Users
     </h1>
     <style>
-        .post-section {
-            width: calc(33.33% - 10px);
-            float: left;
-            padding: 10px;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            margin-bottom: 20px;
-            margin-right: 5px;
-            margin-left: 5px; /* Added margin-right */
-        }
+    .post-section {
+        width: 33.33%;
+        float: left;
+        padding: 10px;
+    }
     </style>
     
     <div class="container my-5">
@@ -35,6 +29,8 @@
                 <div class="post-section">
                     <!-- Your code for each post section goes here -->
                     <!-- For example, you can display the post content -->
+
+
                     <a href="{{ url_for('user.profile_id', user_name = user.name)}}" >
                         <img src="{{ url_for('static', filename='uploads/' + user.profilepicture) }}" alt="Profile Picture" class="profile-picture" style="border-radius: 50%;">
                     </a>
