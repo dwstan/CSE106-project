@@ -19,6 +19,16 @@ class User(UserMixin, db.Model):
     profilepicture = db.Column(db.String(1000), default="default.png")
     description = db.Column(db.String(1000))
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            # Do not include password for security reasons
+            "name": self.name,
+            "profilepicture": self.profilepicture,
+            "description": self.description,
+        }
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy

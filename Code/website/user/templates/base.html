@@ -31,6 +31,24 @@
                         <ul class="navbar-nav ms-auto">
                             {% if current_user.is_authenticated %}
                             <li class="nav-item">
+                                <form id="searchForm" class="d-flex" method="GET">
+                                    <input class="form-control me-2" type="search" id="searchInput" placeholder="Search For Users" aria-label="Search">
+                                    <button class="btn btn-outline-success visually-hidden" type="submit">Search</button>
+                                </form>
+
+                                <script>
+                                    document.getElementById('searchForm').addEventListener('submit', function(event) {
+                                        event.preventDefault();
+                                        var keyword = document.getElementById('searchInput').value;
+                                        window.location.href = '{{ url_for('user.search', keyword="_kw_") }}'.replace('_kw_', encodeURIComponent(keyword));
+                                    });
+
+                                </script>
+
+
+
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ url_for('user.explore')}}" class="nav-link">
                                     <i class="fa-solid fa-compass"></i>
                                     Explore

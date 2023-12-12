@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+    query = "{{ query | tojson | safe }}"
+    user_id = {{user_id}}
+</script>
+
+<div class="container my-5">
+    <script>
+        profilepicture = "{{ profilepicture }}"
+    </script>
+
+    <h1 class="display-4 font-weight-bold text-center">
+        Search Users
+    </h1>
+    <style>
+        .post-section {
+            width: 33.33%;
+            float: left;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+    
+    <div class="container my-5">
+        <div class="row">
+            {% for user in query %}
+                <div class="post-section">
+                    <!-- Your code for each post section goes here -->
+                    <!-- For example, you can display the post content -->
+                    <a href="{{ url_for('user.profile_id', user_name = user.name)}}" >
+                        <img src="{{ url_for('static', filename='uploads/' + user.profilepicture) }}" alt="Profile Picture" class="profile-picture" style="border-radius: 50%;">
+                    </a>
+
+
+                    <a href="{{ url_for('user.profile_id', user_name = user.name)}}" style="text-decoration: none; color: black;">
+                        <h1 class="display-5 font-weight-bold text-center">
+                            {{user.name}}
+                        </h1>
+                    </a>
+                </div>
+                {% if loop.index % 3 == 0 %}
+                    </div>
+                    <div class="row">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+        

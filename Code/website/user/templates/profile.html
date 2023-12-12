@@ -194,7 +194,6 @@
                     {% if post.picture.endswith('.mp4') or post.picture.endswith('.mov') %}
                     
                     <div class="video-wrapper">
-
                         <video src="{{ url_for('static', filename='uploads/' + post.picture) }}" alt="Video" class="overlay-image"></video>
                         <div class="play-button" onclick="window.location.href='{{ url_for('user.post', post_id = post.id )}}'"></div>
                     </div>

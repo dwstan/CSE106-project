@@ -75,3 +75,19 @@ def post(post_id):
         data3 = requests.get("http://127.0.0.1:5000/api/timeline/" + str(current_user.id)).json()
         data4 = requests.get("http://127.0.0.1:5000/api/post/" + str(post_id) + "/" + str(current_user.id)).json()
         return render_template('post.html', name=current_user.name, id=current_user.id, profilepicture=data['profilepicture'], users=data2, timeline=data4)
+
+
+
+@user.route('/search/', defaults={'keyword': None})
+@user.route('/search/<string:keyword>')
+@login_required
+def search(keyword):
+    data = requests.get("http://127.0.0.1:5000/api/user/" + str(current_user.id)).json()
+    data2 = requests.get("http://127.0.0.1:5000/api/user").json()
+    url = "http://127.0.0.1:5000/api/search/" + str(current_user.id)
+    if keyword:
+        url += "/"
+        url += str(keyword)
+    data3 = requests.get(url).json()
+
+    return render_template('search.html', name=current_user.name, id=current_user.id, profilepicture=data['profilepicture'], users=data2, query=data3, keyword=keyword)
