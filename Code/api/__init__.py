@@ -33,18 +33,12 @@ def create_api(app):
     api.add_resource(ProfilePosts, '/api/profileposts/<int:profile_id>')
     api.add_resource(Timeline, '/api/timeline/<int:user_id>')
     api.add_resource(Explore, '/api/explore/<int:user_id>')
-    api.add_resource(Like, '/api/like')
+    api.add_resource(Like, '/api/like', endpoint='like')
+    api.add_resource(Like, '/post/api/like', endpoint='like_post')  # Add the new URL here
+    
     api.add_resource(Comment, '/api/comment')
     api.add_resource(CommentPost, '/api/comment/post/<int:post_id>')
     api.add_resource(PostDetail, '/api/post/<int:post_id>/<int:user_id>')
     api.add_resource(EditProfile, '/api/editprofile')
-
-
-
-
-
-
-
-
 
     return api

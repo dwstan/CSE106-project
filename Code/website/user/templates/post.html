@@ -10,6 +10,11 @@
 </script>
 
 <div class="container">
+
+    <h1 class="display-4 font-weight-bold text-center">
+        Your Timeline 
+    </h1>
+
     {% for post in timeline|sort(reverse=True, attribute='date') %}
     <div class="post container my-5" style=" width: 30vw;">
     

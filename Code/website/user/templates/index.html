@@ -6,21 +6,29 @@
 
     <!-- if user is not logged in -->
     {% if not current_user.is_authenticated %}
-        <h1 class="display-4 font-weight-bold">
-            Nothing to see here, please login to see content
-        </h1>
+        <h3 class="display-4 font-weight-bold my-4">
+            Welcome To Outstagram!
+        </h3>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='css/homePage.png') }}" alt="Sample Image" width="100%">
+            </div>
+            <div class="col-md-6">
+                <h2 class="display-5 font-weight-bold my-4">
+                    Outstagram is a social media platform where you can share your photos and videos with friends and family.
+                    It's just like Instagram but better!
+                </h2>
+                <h2 class="display-6 font-weight-bold">
+                    Please log in or sign up to continue.
+                </h2>
+            </div>
+        </div>
+    </div>
+
+
         <!-- if they be logged in -->
-    {% else %}
-        <h1 class="display-4 font-weight-bold">
-            Oh yeah instagram woo hoo
-        </h1>
-        <h2 class="h3 font-weight-semibold"></h2>
-        <p class="lead">
-            Shit poo fuck damnit
-        </p>
-
-
-
     {% endif %}
 </div>
 {% endblock %}

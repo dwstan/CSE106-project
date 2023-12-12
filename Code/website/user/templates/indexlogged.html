@@ -15,7 +15,10 @@
         Your Timeline 
     </h1>
 
-    {% for post in timeline|sort(reverse=True, attribute='date') %}
+    {% if timeline %}
+        {% for post in timeline|sort(reverse=True, attribute='date') %}
+            <!-- Your existing code for displaying posts -->
+
     <div class="post container my-5" style=" width: 30vw;">
     
         <div style="background-color: lightgray; padding: 10px; display: flex; align-items: center; width: 30vw; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
@@ -80,8 +83,10 @@
 
 
 
-
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p class="display-6 font-weight-bold">Follow people to get posts on your timeline</p>
+    {% endif %}
 
 </div>
 
