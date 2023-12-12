@@ -63,7 +63,7 @@ class CreatePost(Resource):
                 
                 db.session.add(new_post)
                 db.session.commit()
-                return redirect(url_for('user.index'))
+                return redirect(url_for('user.profile_id', user_name=User.query.filter_by(id=user_id).first().name))
                 
                 
         except SQLAlchemyError as e:

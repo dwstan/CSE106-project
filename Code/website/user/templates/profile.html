@@ -166,7 +166,9 @@
                     <h2>{{profile_data.following}} following</h2>
                 </div>
             </div>
-            <h3 style="text-align: left; margin-left: 10vh;" class ="my-3">{{profile_data.description}}</h3>
+            {% if profile_data.description %}
+                <h3 style="text-align: left; margin-left: 10vh;" class="my-3">{{profile_data.description}}</h3>
+            {% endif %}
         </div>
     </div>
 </div>
