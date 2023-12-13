@@ -20,27 +20,28 @@
                 <form id="myForm"  method="POST" action="/api/editprofile"enctype="multipart/form-data" onsubmit="return validateForm()">
 
                     <div class="mb-4">
+                        <label for="nameInput">Username:</label>
                         <input class="form-control" type="text" name="name" id="nameInput" placeholder="Username" autofocus="" value="{{profile.name}}">
                         <small id="nameError" style="color: red;"></small>
                     </div>
-
+                    
                     <input type="hidden" name="user_id" value="{{user_id}}">
-
+                    
                     <div class="mb-4">
-                        <div class="mb-4">
-                            {% if profile.description %}
-                                <textarea class="form-control" name="description" placeholder="Description">{{ profile.description }}</textarea>
-                            {% else %}
-                                <textarea class="form-control" name="description" placeholder="Description"></textarea>
-                            {% endif %}
-                        </div>
-
+                        <label for="description">Description:</label>
+                        {% if profile.description %}
+                            <textarea class="form-control" name="description" id="description" placeholder="Description">{{ profile.description }}</textarea>
+                        {% else %}
+                            <textarea class="form-control" name="description" id="description" placeholder="Description"></textarea>
+                        {% endif %}
+                    </div>
+                    
                     <div class="mb-4">
                         <label for="profilePicture">Change Profile Picture:</label>
                         <input class="form-control" type="file" id="profilePicture" name="picture" accept="image/*">
                     </div>
 
-                    <button class="btn btn-primary btn-block">Edit Profile</button>
+                    <button class="btn btn-primary btn-block">Submit Changes</button>
                 </form>
 
                 <script>
